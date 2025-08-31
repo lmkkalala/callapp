@@ -20,12 +20,13 @@ const expressServer = https.createServer({key, cert}, app);
 const io = socketio(expressServer,{
     cors: {
         origin: [
-            "https://localhost",
+            // "https://localhost",
             'https://callapp.jambodocta.com',
             // 'https://10.199.70.231' //if using a phone or another 
             
         ],
-        methods: ["GET", "POST"]
+        methods: ["GET", "POST"],
+        withCredentials: true
     }
 });
 expressServer.listen(8181);
