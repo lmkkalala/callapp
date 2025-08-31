@@ -21,15 +21,16 @@ const io = socketio(expressServer,{
     cors: {
         origin: [
             // "https://localhost",
-            'https://callapp.jambodocta.com',
-            // 'https://10.199.70.231' //if using a phone or another 
+            // 'https://callapp.jambodocta.com',
+            'https://10.199.70.231' //if using a phone or another 
             
         ],
         methods: ["GET", "POST"],
         withCredentials: true
     }
 });
-expressServer.listen(8181);
+// expressServer.listen(8181);
+expressServer.listen(443);
 
 //offers will contain {}
 const offers = [
