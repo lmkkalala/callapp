@@ -1,31 +1,555 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appel Vidéo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background: #111b21;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            padding: 16px;
+        }
+        
+        .call-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            max-height: 900px;
+            position: relative;
+            background: #0c1317;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .contact-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: linear-gradient(to bottom, #0c1317, #202c33);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .my-video {
+            position: fixed;
+            width: 30%;
+            max-width: 140px;
+            height: 25%;
+            max-height: 180px;
+            right: 15px;
+            top: 15px;
+            border-radius: 8px;
+            background: #2a3942;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            object-fit: cover;
+        }
+        
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 15px;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .contact-name {
+            font-size: 19px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .call-button {
+            font-size: 10px;
+            font-weight: 500;
+            text-align: center;
+            color: #fff;
+        }
+        
+        .call-status {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+        
+        .controls-bar {
+            position: absolute;
+            bottom: 60px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            flex-wrap: wrap;
+        }
+        
+        .control-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .control-button i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .end-call {
+            background: #e53e3e;
+        }
+        
+        .end-call:hover {
+            background: #c53030;
+        }
+        
+        .muted {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .menu-button {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            color: white;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 20;
+        }
+        
+        .menu-options {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 10px 0;
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .menu-options-calls {
+            position: absolute;
+            bottom: 120px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 10px 0;
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+        }
+        
+        .menu-option {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .menu-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-option i {
+            font-size: 20px;
+        }
+
+        .menu-options-calls {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .hide-ui {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .call-timer {
+            margin-top: 5px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            justify-content: center;
+        }
+
+         .my-video {
+            width: 100%;         /* Make the container take full width */
+            margin: auto;        /* Center it */
+            overflow: hidden;    /* Ensures no overflow */
+            border: 2px solid #ccc; /* Optional styling */
+            border-radius: 10px;    /* Optional rounded corners */
+        }
+
+        .my-video video {
+            width: 100%;         /* Video scales to container width */
+            height: 100%;        /* Maintain aspect ratio */
+            display: block;      /* Remove unwanted whitespace */
+        }
+        
+        /* Media Queries pour la responsivité */
+        @media (max-width: 500px) {
+            .call-container {
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            .control-button {
+                width: 55px;
+                height: 55px;
+            }
+            
+            .controls-bar {
+                gap: 15px;
+                bottom: 20px;
+            }
+            
+            .my-video {
+                width: 25%;
+                height: 20%;
+            }
+            
+            .top-bar {
+                padding: 15px;
+            }
+            
+            .contact-name {
+                font-size: 17px;
+            }
+            
+            .call-status {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .controls-bar {
+                gap: 10px;
+                bottom: 20px;
+            }
+            
+            .control-button {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .control-button i {
+                font-size: 20px;
+            }
+            
+            .menu-button {
+                font-size: 20px;
+                top: 20px;
+                right: 15px;
+            }
+
+            .my-video {
+                width: 25%;
+                height: 20%;
+            }
+            
+            .top-bar {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-height: 800px) {
+            .my-video {
+                height: 20%;
+            }
+            
+            .controls-bar {
+                gap: 10px;
+                bottom: 20px;
+            }
+            
+            .top-bar {
+                padding: 15px;
+            }
+        }
+        
+        /* Mode paysage */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .call-container {
+                max-height: 400px;
+                max-width: 800px;
+            }
+            
+            .controls-bar {
+                gap: 10px;
+                bottom: 15px;
+            }
+            
+            .control-button {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .my-video {
+                width: 20%;
+                height: 45%;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .top-bar {
+                padding: 10px;
+            }
+            
+            .contact-name {
+                font-size: 16px;
+            }
+            
+            .call-status {
+                font-size: 13px;
+            }
+        }
+        
+        /* Styles pour les très petits appareils */
+        @media (max-width: 350px) {
+            .controls-bar {
+                gap: 8px;
+            }
+            
+            .control-button {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .control-button i {
+                font-size: 18px;
+            }
+            
+            .contact-name {
+                font-size: 16px;
+            }
+        }
+
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row mb-3 mt-3 justify-content-md-center">
-            <div id="user-name"></div>
-            <button id="call" class="btn btn-primary col-1">Call!</button>
-            <button id="hangup" class="col-1" class="btn btn-primary">Hangup</button>
-            <div id="answer" class="col"></div>
+    <div class="call-container">
+        <video class="contact-video" id="remote-video" autoplay playsinline></video>
+        
+        <div class="my-video">
+            <video id="local-video" autoplay playsinline></video>
         </div>
-        <div id="videos">
-            <div id="video-wrapper">
-                <div id="waiting" class="btn btn-warning">Waiting for answer...</div>
-                <video class="video-player" id="local-video" autoplay playsinline controls></video>
+        
+        <div class="top-bar">
+            <div class="contact-info">
+                <div class="contact-name" id="user-name">Sophie Martin</div>
+                <div class="call-status">En appel vidéo</div>
+                <div class="call-timer">00:00:00</div>
+                <div class="connection-status">
+                    <button class="control-button" id="call">
+                        <span class="call-button">APPELER</span>
+                    </button>
+                </div>
             </div>
-            <video class="video-player" id="remote-video" autoplay playsinline controls></video>
+        </div>
+        
+        <!-- <button class="menu-button">
+            <i class="fas fa-ellipsis-v"></i>
+        </button> -->
+        
+        <!-- <div class="menu-options">
+            <div class="menu-option">
+                <i class="fas fa-volume-up"></i>
+                <span>Haut-parleur</span>
+            </div>
+            <div class="menu-option">
+                <i class="fas fa-user-plus"></i>
+                <span>Ajouter une personne</span>
+            </div>
+            <div class="menu-option">
+                <i class="fas fa-comment"></i>
+                <span>Message</span>
+            </div>
+        </div> -->
+
+        <div class="menu-options-calls">
+            <div style="border-bottom: solid; border-color: #ccc; padding-bottom: 1px;">
+                <span>Les Appels Encours</span>
+            </div>
+            <div class="" id="answer"></div>
+        </div>
+        
+        <div class="controls-bar">
+            <button class="control-button" id="mic-button">
+                <i class="fas fa-microphone"></i>
+            </button>
+            <button class="control-button" id="video-button">
+                <i class="fas fa-video"></i>
+            </button>
+            <button class="control-button end-call" id="hangup">
+                <i class="fas fa-phone"></i>
+            </button>
+            <!-- <button class="control-button" id="switch-camera">
+                <i class="fas fa-sync-alt"></i>
+            </button> -->
+            <!-- <button class="control-button" id="menu-toggle">
+                <i class="fas fa-ellipsis-h"></i>
+            </button> -->
+            <button class="control-button" id="menu-toggle-calls">
+                <i class="fas fa-list"></i>
+            </button>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const callContainer = document.querySelector('.call-container');
+            const topBar = document.querySelector('.top-bar');
+            const controlsBar = document.querySelector('.controls-bar');
+            // const menuToggle = document.getElementById('menu-toggle');
+            const menuToggleCalls = document.getElementById('menu-toggle-calls');
+            // const menuOptions = document.querySelector('.menu-options');
+            const menuOptionsCalls = document.querySelector('.menu-options-calls');
+            // const menuButton = document.querySelector('.menu-button');
+            
+            let uiVisible = true;
+            let hideUITimeout;
+            
+            // Cacher l'UI après un délai d'inactivité
+            function hideUIAfterDelay() {
+                clearTimeout(hideUITimeout);
+                hideUITimeout = setTimeout(() => {
+                    if (uiVisible) {
+                        uiVisible = false;
+                        // topBar.classList.add('hide-ui');
+                        // controlsBar.classList.add('hide-ui');
+                        // menuOptions.style.display = 'none';
+                    }
+                }, 3000);
+            }
+
+            function hideUIAfterDelayCalls() {
+                clearTimeout(hideUITimeout);
+                hideUITimeout = setTimeout(() => {
+                    if (uiVisible) {
+                        uiVisible = false;
+                        // topBar.classList.add('hide-ui');
+                        // controlsBar.classList.add('hide-ui');
+                        menuOptionsCalls.style.display = 'none';
+                    }
+                }, 3000);
+            }
+            
+            hideUIAfterDelay();
+            hideUIAfterDelayCalls();
+            
+            // Basculer la visibilité de l'UI
+            // callContainer.addEventListener('click', function(e) {
+            //     if (e.target.closest('.control-button') || e.target.closest('.menu-button')) return;
+                
+            //     uiVisible = !uiVisible;
+            //     topBar.classList.toggle('hide-ui', !uiVisible);
+            //     controlsBar.classList.toggle('hide-ui', !uiVisible);
+            //     menuOptions.style.display = 'none';
+                
+            //     hideUIAfterDelay();
+            // }); 
+            
+            // Menu options
+            // menuToggle.addEventListener('click', function() {
+            //     menuOptions.style.display = menuOptions.style.display === 'flex' ? 'none' : 'flex';
+            //     hideUIAfterDelay();
+            // });
+
+            // Menu options Calls
+            menuToggleCalls.addEventListener('click', function() {
+                menuOptionsCalls.style.display = menuOptionsCalls.style.display === 'flex' ? 'none' : 'flex';
+                hideUIAfterDelayCalls();
+            });
+            
+            // menuButton.addEventListener('click', function() {
+            //     menuOptions.style.display = menuOptions.style.display === 'flex' ? 'none' : 'flex';
+            //     hideUIAfterDelay();
+            // });
+            
+            // Bouton raccrocher
+            // document.querySelector('.end-call').addEventListener('click', function() {
+            //     clearInterval(callTimer);
+            //     alert('Appel terminé');
+            // });
+            
+            // Gestion du redimensionnement de la fenêtre
+            window.addEventListener('resize', function() {
+                hideUIAfterDelay();
+            });
+            
+            // Simuler un appel entrant au chargement
+            setTimeout(() => {
+                document.querySelector('.call-status').textContent = "En appel vidéo";
+            }, 1000);
+        });
+    </script>
+
+    <script src="./socket.io/socket.io.js"></script>
+    <script src='scripts.js'></script>
+    <script src='socketListeners.js'></script>  
 </body>
-<script src="/socket.io/socket.io.js"></script>
-<script src='scripts.js'></script>
-<script src='socketListeners.js'></script>
 </html>

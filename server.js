@@ -21,7 +21,7 @@ const io = socketio(expressServer,{
     cors: {
         origin: [
             "https://localhost",
-            // 'https://LOCAL-DEV-IP-HERE' //if using a phone or another computer
+            'https://10.199.70.231' //if using a phone or another computer
         ],
         methods: ["GET", "POST"]
     }
@@ -117,7 +117,7 @@ io.on('connection',(socket)=>{
                     if(socketToSendTo){
                         socket.to(socketToSendTo.socketId).emit('receivedIceCandidateFromServer',iceCandidate)
                     }else{
-                        console.log("Ice candidate recieved but could not find answere")
+                        console.log("Ice candidate recieved but could not find answerer")
                     }
                 }
             }

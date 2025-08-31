@@ -1,10 +1,38 @@
-const userName = "Rob-"+Math.floor(Math.random() * 100000)
+
+// Démarrer le minuteur d'appel
+let callTimer;
+let seconds = 84;
+function startCallTimer() {
+    callTimer = setInterval(() => {
+        seconds++;
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        document.querySelector('.call-timer').textContent = 
+            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }, 1000);
+}
+
+const usercodefunction = async(offerObj)=>{
+    var code = prompt("Enter Manuel code");
+    document.querySelector('#user-name').innerHTML = "Rob-"+code;
+    return code;
+}
+
+// var usercode = null;
+var userName = "IDENTIFIANT: "+Math.floor(Math.random() * 100000)
+// usercode = document.querySelector('#usercode').addEventListener('click',usercodefunction)
+// if (usercode != null) {
+//     userName = "Rob-"+usercode;
+// }
+
 const password = "x";
 document.querySelector('#user-name').innerHTML = userName;
 
 //if trying it on a phone, use this instead...
-// const socket = io.connect('https://LOCAL-DEV-IP-HERE:8181/',{
-const socket = io.connect('https://localhost:8181/',{
+const socket = io.connect('https://10.199.70.231:8181/',{
+// const socket = io.connect('https://10.49.64.231:8181/',{
+// const socket = io.connect('https://localhost:8181/',{
     auth: {
         userName,password
     }
@@ -38,12 +66,31 @@ const call = async e=>{
 
     //create offer time!
     try{
+        startCallTimer();
         console.log("Creating offer...")
         const offer = await peerConnection.createOffer();
         console.log(offer);
         peerConnection.setLocalDescription(offer);
         didIOffer = true;
         socket.emit('newOffer',offer); //send offer to signalingServer
+    }catch(err){
+        console.log(err)
+    }
+
+}
+
+const hangup = async e=>{
+    //close offer time!
+    try{
+        // peerConnection.close();
+        localStream.getTracks().forEach(track=>{
+            track.stop();
+        })
+        remoteStream.getTracks().forEach(track=>{
+            track.stop();
+        })
+        localVideoEl.srcObject = null;
+        remoteVideoEl.srcObject = null;
     }catch(err){
         console.log(err)
     }
@@ -65,7 +112,8 @@ const answerOffer = async(offerObj)=>{
     const offerIceCandidates = await socket.emitWithAck('newAnswer',offerObj)
     offerIceCandidates.forEach(c=>{
         peerConnection.addIceCandidate(c);
-        console.log("======Added Ice Candidate======")
+        startCallTimer();
+        console.log("======Added Ice Candidate======");
     })
     console.log(offerIceCandidates)
 }
@@ -83,7 +131,7 @@ const fetchUserMedia = ()=>{
         try{
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: true,
-                // audio: true,
+                audio: true,
             });
             localVideoEl.srcObject = stream;
             localStream = stream;    
@@ -153,4 +201,52 @@ const addNewIceCandidate = iceCandidate=>{
 }
 
 
+// Toggle camera on/off
+function toggleCamera() {
+    if (!localStream) return;
+    
+    const videoTracks = localStream.getVideoTracks();
+    if (videoTracks.length > 0) {
+        const isEnabled = videoTracks[0].enabled;
+        videoTracks[0].enabled = !isEnabled;
+        console.log('Camera', !isEnabled ? 'enabled' : 'disabled');
+    }
+}
+
+// Toggle microphone on/off
+function toggleMicrophone() {
+    if (!localStream) return;
+    
+    const audioTracks = localStream.getAudioTracks();
+    if (audioTracks.length > 0) {
+        const isEnabled = audioTracks[0].enabled;
+        audioTracks[0].enabled = !isEnabled;
+        console.log('Microphone', !isEnabled ? 'enabled' : 'disabled');
+    }
+}
+
+const micButton = document.getElementById('mic-button');
+const videoButton = document.getElementById('video-button');
+let micOn = true;
+let videoOn = true;
+// Contrôle du microphone
+micButton.addEventListener('click', function() {
+    micOn = !micOn;
+    this.classList.toggle('muted', !micOn);
+    this.querySelector('i').className = micOn ? 'fas fa-microphone' : 'fas fa-microphone-slash';
+    // hideUIAfterDelay();
+    toggleMicrophone();
+});
+
+// Contrôle de la vidéo
+videoButton.addEventListener('click', function() {
+    videoOn = !videoOn;
+    this.classList.toggle('muted', !videoOn);
+    this.querySelector('i').className = videoOn ? 'fas fa-video' : 'fas fa-video-slash';
+    document.querySelector('.my-video').style.backgroundColor = videoOn ? '#2a3942' : '#3b4a54';
+    // hideUIAfterDelay();
+    toggleCamera();
+});
+
 document.querySelector('#call').addEventListener('click',call)
+document.querySelector('#hangup').addEventListener('click',hangup)
