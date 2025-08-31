@@ -21,7 +21,7 @@ const io = socketio(expressServer,{
     cors: {
         origin: [
             // "https://localhost",
-            'https://77.37.37.166',
+            'https://callapp.jambodocta.com/',
             // 'https://10.199.70.231' //if using a phone or another 
             
         ],
