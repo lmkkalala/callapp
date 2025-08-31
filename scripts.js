@@ -30,8 +30,8 @@ const password = "x";
 document.querySelector('#user-name').innerHTML = userName;
 
 //if trying it on a phone, use this instead...
-const socket = io.connect('https://77.37.37.166:80/',{
-// const socket = io.connect('https://10.199.70.231:8181/',{
+const socket = io.connect('https://77.37.37.166:443/',{
+// const socket = io.connect('https://10.199.70.231:443/',{
 // const socket = io.connect('https://localhost:8181/',{
     auth: {
         userName,password

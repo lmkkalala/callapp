@@ -29,7 +29,7 @@ const io = socketio(expressServer,{
         withCredentials: true
     }
 });
-expressServer.listen(80);
+expressServer.listen(443);
 
 //offers will contain {}
 const offers = [
