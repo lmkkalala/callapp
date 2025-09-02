@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Configuration pour Socket.IO et le proxy inverse
+  RewriteCond %{REQUEST_URI}  ^/socket.io            [NC]
+  RewriteCond %{QUERY_STRING} transport=polling       [NC]
+  RewriteRule /(.*)           http://localhost:8181/$1 [P]
+
+  # Proxy pour les requêtes HTTP standard (si nécessaire)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ http://localhost:8181/$1 [P]
+
+  # Les flags importants :
+  # [NC] = Case-insensitive (ignore la casse)
+  # [P] = Proxy (la requête est transmise via proxy, essentiel !)
+</IfModule>
