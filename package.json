@@ -11,6 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@capacitor/app": "7.1.0",
+    "@capacitor/cli": "7.4.3",
+    "@capacitor/core": "7.4.3",
+    "@capacitor/haptics": "7.0.2",
+    "@capacitor/keyboard": "7.0.3",
+    "@capacitor/status-bar": "7.0.3",
     "express": "^4.18.2",
     "mkcert": "^1.5.1",
     "socket.io": "^4.6.2"
