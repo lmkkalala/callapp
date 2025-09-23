@@ -1,6 +1,7 @@
 
 const fs = require('fs');
 const https = require('https');
+const http = require('http');
 const express = require('express');
 const app = express();
 const socketio = require('socket.io');
@@ -20,7 +21,7 @@ app.use(express.static(__dirname))
 //we changed our express setup so we can use https
 //pass the key and cert to createServer on https
 // const expressServer = https.createServer({key, cert}, app);
-const expressServer = https.createServer(app);
+const expressServer = http.createServer(app);
 //create our socket.io server... it will listen to our express port
 const io = socketio(expressServer,{
     cors: {
