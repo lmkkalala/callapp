@@ -10,8 +10,10 @@ app.use(express.static(__dirname))
 //we generated them with mkcert
 // $ mkcert create-ca
 // $ mkcert create-cert
-const key = fs.readFileSync(__dirname+'/cert.key');
-const cert = fs.readFileSync(__dirname+'/cert.crt');
+const key = fs.readFileSync('/root/callapp/cert.key');
+const cert = fs.readFileSync('/root/callapp/cert.crt');
+
+console.log(__dirname);
 
 //we changed our express setup so we can use https
 //pass the key and cert to createServer on https
