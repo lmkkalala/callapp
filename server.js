@@ -14,12 +14,13 @@ app.use(express.static(__dirname))
 // const key = fs.readFileSync('/root/callapp/cert.key');
 // const cert = fs.readFileSync('/root/callapp/cert.crt');
 
-const key = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/privkey.pem');
-const cert = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/fullchain.pem');
+// const key = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/privkey.pem');
+// const cert = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/fullchain.pem');
 
 //we changed our express setup so we can use https
 //pass the key and cert to createServer on https
-const expressServer = https.createServer({key, cert}, app);
+// const expressServer = https.createServer({key, cert}, app);
+const expressServer = http.createServer(app);
 //create our socket.io server... it will listen to our express port
 const io = socketio(expressServer,{
     cors: {
@@ -34,7 +35,9 @@ const io = socketio(expressServer,{
         withCredentials: true
     }
 });
-expressServer.listen(8181);
+expressServer.listen(8181, '0.0.0.0', () => {
+    console.log('Server running on port 8181 (HTTP)');
+});
 
 //offers will contain {}
 const offers = [
