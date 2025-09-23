@@ -10,8 +10,8 @@ app.use(express.static(__dirname))
 //we generated them with mkcert
 // $ mkcert create-ca
 // $ mkcert create-cert
-const key = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/privkey.pem');
-const cert = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/fullchain.pem');
+const key = fs.readFileSync(__dirname+'/cert.key');
+const cert = fs.readFileSync(__dirname+'/cert.crt');
 
 //we changed our express setup so we can use https
 //pass the key and cert to createServer on https
