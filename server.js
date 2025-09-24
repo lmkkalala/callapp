@@ -12,16 +12,21 @@ app.use(express.static(__dirname))
 // $ mkcert create-ca
 // $ mkcert create-cert
 
+// const key = fs.readFileSync('cert.key');
+// const cert = fs.readFileSync('cert.crt');
+
+// Hostinger config for ssl files
 // const key = fs.readFileSync('/root/callapp/cert.key');
 // const cert = fs.readFileSync('/root/callapp/cert.crt');
 
-// const key = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/privkey.pem');
-// const cert = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/fullchain.pem');
+// Or this is Hostinger config for ssl files
+const key = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/privkey.pem');
+const cert = fs.readFileSync('/etc/letsencrypt/live/call.jambodocta.com/fullchain.pem');
 
 //we changed our express setup so we can use https
 //pass the key and cert to createServer on https
-// const expressServer = https.createServer({key, cert}, app);
-const expressServer = http.createServer(app);
+const expressServer = https.createServer({key, cert}, app);
+// const expressServer = http.createServer(app);
 //create our socket.io server... it will listen to our express port
 const io = socketio(expressServer,{
     cors: {
