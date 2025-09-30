@@ -30,21 +30,20 @@ const expressServer = https.createServer({key, cert}, app);
 //create our socket.io server... it will listen to our express port
 const io = socketio(expressServer,{
     cors: {
-        origin: "*",
-        // [
+        origin: [
             // "https://localhost",
-            // 'https://call.jambodocta.com/',
+            'https://call.jambodocta.com/',
             // 'https://callapp.jambodocta.com/',
             // 'https://10.199.70.231', //if using a phone or another
             
-        // ],
+        ],
         methods: ["GET", "POST"],
         withCredentials: true
     },
     // Important pour les connexions externes
-    allowEIO3: true,
-    pingTimeout: 60000,
-    pingInterval: 25000
+    // allowEIO3: true,
+    // pingTimeout: 60000,
+    // pingInterval: 25000
 });
 expressServer.listen(8181, '0.0.0.0', () => {
     console.log('Server running on port 8181 (HTTP)');
@@ -72,6 +71,7 @@ io.on('connection',(socket)=>{
         socket.disconnect(true);
         return;
     }
+    
     connectedSockets.push({
         socketId: socket.id,
         userName
