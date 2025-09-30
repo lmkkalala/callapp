@@ -32,7 +32,7 @@ const io = socketio(expressServer,{
     cors: {
         origin: [
             // "https://localhost",
-            'https://call.jambodocta.com/',
+            'https://call.jambodocta.com:8181/',
             // 'https://callapp.jambodocta.com/',
             // 'https://10.199.70.231', //if using a phone or another
             
