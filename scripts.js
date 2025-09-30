@@ -53,20 +53,20 @@ let peerConfiguration = {
             urls:[
               'stun:stun.l.google.com:19302',
               'stun:stun1.l.google.com:19302',
-            //   'stun:stun2.l.google.com:19302'
+              'stun:stun2.l.google.com:19302'
             ]
         }
-        // ,
-        // {
-        //     urls: 'turn:global.turn.server.com:3478',
-        //     username: 'username',
-        //     credential: 'credential'
-        // }
+        ,
+        {
+            urls: 'turn:global.turn.server.com:3478',
+            username: 'username',
+            credential: 'credential'
+        }
     ]
-    // ,
-    // iceTransportPolicy: 'all',
-    // bundlePolicy: 'max-bundle',
-    // rtcpMuxPolicy: 'require'
+    ,
+    iceTransportPolicy: 'all',
+    bundlePolicy: 'max-bundle',
+    rtcpMuxPolicy: 'require'
 }
 
 //when a client initiates a call
