@@ -39,7 +39,8 @@ const io = socketio(expressServer,{
         ],
         methods: ["GET", "POST"],
         withCredentials: true
-    },
+    }
+    // ,
     // Important pour les connexions externes
     // allowEIO3: true,
     // pingTimeout: 60000,
@@ -71,7 +72,7 @@ io.on('connection',(socket)=>{
         socket.disconnect(true);
         return;
     }
-    
+
     connectedSockets.push({
         socketId: socket.id,
         userName

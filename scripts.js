@@ -55,13 +55,15 @@ let peerConfiguration = {
               'stun:stun1.l.google.com:19302',
             //   'stun:stun2.l.google.com:19302'
             ]
-        },
+        }
+        // ,
         // {
         //     urls: 'turn:global.turn.server.com:3478',
         //     username: 'username',
         //     credential: 'credential'
         // }
-    ],
+    ]
+    // ,
     // iceTransportPolicy: 'all',
     // bundlePolicy: 'max-bundle',
     // rtcpMuxPolicy: 'require'
