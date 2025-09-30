@@ -42,9 +42,9 @@ const io = socketio(expressServer,{
     }
     ,
     // Important pour les connexions externes
-    allowEIO3: true,
-    pingTimeout: 60000,
-    pingInterval: 25000
+    // allowEIO3: true,
+    // pingTimeout: 60000,
+    // pingInterval: 25000
 });
 expressServer.listen(8181, '0.0.0.0', () => {
     console.log('Server running on port 8181 (HTTP)');

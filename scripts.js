@@ -62,10 +62,10 @@ let peerConfiguration = {
         //     credential: 'credential'
         // }
     ]
-    ,
-    iceTransportPolicy: 'all',
-    bundlePolicy: 'max-bundle',
-    rtcpMuxPolicy: 'require'
+    // ,
+    // iceTransportPolicy: 'all',
+    // bundlePolicy: 'max-bundle',
+    // rtcpMuxPolicy: 'require'
 }
 
 //when a client initiates a call
